@@ -1,9 +1,12 @@
 # Ignore terraform binaries
 terraform/.terraform
 
+# Ignore terraform lock
+*.lock.hcl
+
 # Ignore terraform state
-terraform/terraform.tfstate
-terraform/terraform.tfstate.backup
+terraform.tfstate
+terraform.tfstate.backup
 
 # Ignore logs
 game/addons/sourcemod/logs
