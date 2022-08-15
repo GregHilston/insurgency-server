@@ -44,14 +44,4 @@ resource "aws_codebuild_project" "image_builder" {
     type = "GITHUB"
     location = "${var.github_repo}"
   }
-
-  provisioner "local-exec" {
-    command = <<COMMAND
-      echo "CodeBuild additional steps:"
-      echo "  1. Please login on AWS Console and link your Github account to CodeBuild!"
-      echo "  2. Run the command below when you're done:"
-      printf "AWS_DEFAULT_REGION=${var.aws_region} AWS_PROFILE=${var.aws_profile}"
-      echo " aws codebuild create-webhook --project-name=${aws_codebuild_project.image_builder.name}"
-COMMAND
-  }
 }
