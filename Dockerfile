@@ -1,25 +1,18 @@
-FROM kriansa/insurgency-server:2018-12-24
-LABEL maintainer="Daniel Pereira <daniel@garajau.com.br>"
+# Based on https://github.com/GameServers/Insurgency
+FROM gameservers/steamcmd
 
-# Runtime settings
-ENV RCON_PASSWORD=""
-ENV SV_PASSWORD=""
-ENV MAPNAME="market_coop checkpoint"
-ENV MAPCYCLEFILE="mapcycle_checkpoint.txt"
+ENV APPID=237410
+ENV APPDIR=/home/steamsrv/Insurgency
+ENV APP_GAME_NAME insurgency
+ENV APP_SERVER_PORT 27015
+ENV APP_SERVER_MAXPLAYERS 24
+ENV APP_SERVER_MAP market_coop
+ENV APP_SERVER_NAME Gerk
+ENV USE_SRCDS true
 
-# Force installation of workshop content
-# sv_pure has to come first otherwise it will fail to download workshop files
-# and the client will see "success failure" glowing sprites
-ADD --chown=steam:steam game/subscribed_file_ids.txt insurgency/
-RUN ./srcds_linux +sv_pure 0 -workshop +quit || true
+ADD ./game/cfg/server.cfg /home/steamsrv/server.cfg
 
-# Send our custom files to the server
-ADD --chown=steam:steam game/cfg/* insurgency/cfg/
-ADD --chown=steam:steam game/addons insurgency/addons
+expose ${APP_SERVER_PORT}/udp
+expose ${APP_SERVER_PORT}
 
-# Run command with workshop support and tweaking it to Checkpoint Fun mode
-# sv_pure and mapcyclefile have to be set on CLI
-CMD ./srcds_linux -port 27015 -ip 0.0.0.0 -workshop \
-   +rcon_password "$RCON_PASSWORD" +sv_password "$SV_PASSWORD" \
-   +maxplayers $MAXPLAYERS +map $MAPNAME \
-   +mapcyclefile "$MAPCYCLEFILE" +sv_pure 0
+cmd /scripts/StartServer

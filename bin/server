@@ -26,9 +26,11 @@ help() {
 
 # Groups the logic to start the service
 start() {
+  echo "aws ecs update-service --cluster $cluster_name --service $service_name --desired-count 1"
+
   # Scale the service up to get a task running
   aws ecs update-service --cluster "$cluster_name" --service "$service_name" \
-    --desired-count 1 > /dev/null
+    --desired-count 1 #> /dev/null
 
   # Poll ECS to get the running task ARN
   while [ "$task" = "" ]; do
