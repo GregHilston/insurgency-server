@@ -3,7 +3,6 @@ set -euo pipefail
 IFS=$'\n\t'
 
 # Loads .env
-# shellcheck disable=2039 disable=1091
 source "./.env"
 
 # --raw ensures that the terraform output is not wrapped in quotes for string representation

@@ -1,7 +1,8 @@
 #!/bin/bash
+set -euo pipefail
+IFS=$'\n\t'
 
 # Loads .env
-# shellcheck disable=2039 disable=1091
 source "./.env"
 
 cluster_name=$(bin/terraform.sh output --raw cluster_name)
