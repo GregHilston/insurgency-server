@@ -1,4 +1,6 @@
 #!/bin/bash
+set -euo pipefail
+IFS=$'\n\t'
 
 # cd to root path
 cd "$(dirname "$0")/.." || exit;
