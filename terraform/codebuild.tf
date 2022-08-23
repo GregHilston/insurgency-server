@@ -44,10 +44,4 @@ resource "aws_codebuild_project" "image_builder" {
     type     = "GITHUB"
     location = var.github_repo
   }
-
-  tags = merge(
-    local.common_tags,
-    {
-    }
-  )
 }

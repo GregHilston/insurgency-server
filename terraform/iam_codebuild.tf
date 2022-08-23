@@ -18,12 +18,6 @@ resource "aws_iam_role" "codebuild" {
   ]
 }
 EOF
-
-  tags = merge(
-    local.common_tags,
-    {
-    }
-  )
 }
 
 # This is a policy that allow CodeBuild to pull and push images to AWS ECR
@@ -51,12 +45,6 @@ resource "aws_iam_policy" "ecr_write" {
   ]
 }
 POLICY
-
-  tags = merge(
-    local.common_tags,
-    {
-    }
-  )
 }
 
 resource "aws_iam_role_policy_attachment" "enable_ecr_write_to_codebuild" {
@@ -88,12 +76,6 @@ resource "aws_iam_policy" "logs_write" {
   ]
 }
 POLICY
-
-  tags = merge(
-    local.common_tags,
-    {
-    }
-  )
 }
 
 resource "aws_iam_role_policy_attachment" "enable_logs_to_codebuild" {

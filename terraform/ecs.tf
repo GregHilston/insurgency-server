@@ -1,21 +1,9 @@
 resource "aws_ecr_repository" "main" {
   name = "insurgency_server-registry"
-
-  tags = merge(
-    local.common_tags,
-    {
-    }
-  )
 }
 
 resource "aws_ecs_cluster" "main" {
   name = "${local.service_name}-Cluster"
-
-  tags = merge(
-    local.common_tags,
-    {
-    }
-  )
 }
 
 resource "aws_ecs_task_definition" "main" {
@@ -76,12 +64,6 @@ resource "aws_ecs_task_definition" "main" {
   }
 ]
 DEFINITION
-
-  tags = merge(
-    local.common_tags,
-    {
-    }
-  )
 }
 
 resource "aws_ecs_service" "main" {
@@ -99,10 +81,4 @@ resource "aws_ecs_service" "main" {
     subnets          = ["${aws_subnet.main.id}"]
     assign_public_ip = true
   }
-
-  tags = merge(
-    local.common_tags,
-    {
-    }
-  )
 }

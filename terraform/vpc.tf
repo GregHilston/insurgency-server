@@ -2,34 +2,16 @@ data "aws_availability_zones" "available" {}
 
 resource "aws_vpc" "main" {
   cidr_block = "10.0.0.0/16"
-
-  tags = merge(
-    local.common_tags,
-    {
-    }
-  )
 }
 
 resource "aws_subnet" "main" {
   cidr_block        = cidrsubnet(aws_vpc.main.cidr_block, 8, 1) // 10.0.1.0/24
   availability_zone = data.aws_availability_zones.available.names[0]
   vpc_id            = aws_vpc.main.id
-
-  tags = merge(
-    local.common_tags,
-    {
-    }
-  )
 }
 
 resource "aws_internet_gateway" "main" {
   vpc_id = aws_vpc.main.id
-
-  tags = merge(
-    local.common_tags,
-    {
-    }
-  )
 }
 
 resource "aws_default_route_table" "main" {
@@ -39,12 +21,6 @@ resource "aws_default_route_table" "main" {
     cidr_block = "0.0.0.0/0"
     gateway_id = aws_internet_gateway.main.id
   }
-
-  tags = merge(
-    local.common_tags,
-    {
-    }
-  )
 }
 
 resource "aws_default_security_group" "default" {
@@ -56,12 +32,6 @@ resource "aws_default_security_group" "default" {
     protocol    = "-1"
     cidr_blocks = ["0.0.0.0/0"]
   }
-
-  tags = merge(
-    local.common_tags,
-    {
-    }
-  )
 }
 
 resource "aws_security_group" "allow_server_traffic_from_internet" {
@@ -82,10 +52,4 @@ resource "aws_security_group" "allow_server_traffic_from_internet" {
     to_port     = 27015
     cidr_blocks = ["0.0.0.0/0"]
   }
-
-  tags = merge(
-    local.common_tags,
-    {
-    }
-  )
 }

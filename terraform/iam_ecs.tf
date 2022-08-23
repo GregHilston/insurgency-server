@@ -1,11 +1,5 @@
 data "aws_iam_policy" "amazon_ecs_task_execution_role_policy" {
   arn = "arn:aws:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy"
-
-  tags = merge(
-    local.common_tags,
-    {
-    }
-  )
 }
 
 resource "aws_iam_role" "ecs_task_execution" {
@@ -27,12 +21,6 @@ resource "aws_iam_role" "ecs_task_execution" {
   ]
 }
 EOF
-
-  tags = merge(
-    local.common_tags,
-    {
-    }
-  )
 }
 
 resource "aws_iam_role_policy_attachment" "aws_ecs_task_execution_policy_to_role" {
