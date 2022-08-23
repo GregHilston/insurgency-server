@@ -1,7 +1,7 @@
 # This is the role that gets attached to the CodeBuild so it can use AWS
 # services in our behalf
 resource "aws_iam_role" "codebuild" {
-  name = "CodeBuildRoleFor${local.service_name}"
+  name        = "CodeBuildRoleFor${local.service_name}"
   description = "Role attached to CodeBuild for Insurgency Server access"
 
   assume_role_policy = <<EOF
@@ -18,6 +18,12 @@ resource "aws_iam_role" "codebuild" {
   ]
 }
 EOF
+
+  tags = merge(
+    local.common_tags,
+    {
+    }
+  )
 }
 
 # This is a policy that allow CodeBuild to pull and push images to AWS ECR
@@ -45,11 +51,17 @@ resource "aws_iam_policy" "ecr_write" {
   ]
 }
 POLICY
+
+  tags = merge(
+    local.common_tags,
+    {
+    }
+  )
 }
 
 resource "aws_iam_role_policy_attachment" "enable_ecr_write_to_codebuild" {
-  role = "${aws_iam_role.codebuild.id}"
-  policy_arn = "${aws_iam_policy.ecr_write.arn}"
+  role       = aws_iam_role.codebuild.id
+  policy_arn = aws_iam_policy.ecr_write.arn
 }
 
 # This Policies are required in order to make CodeBuild service role work
@@ -76,9 +88,15 @@ resource "aws_iam_policy" "logs_write" {
   ]
 }
 POLICY
+
+  tags = merge(
+    local.common_tags,
+    {
+    }
+  )
 }
 
 resource "aws_iam_role_policy_attachment" "enable_logs_to_codebuild" {
-  role = "${aws_iam_role.codebuild.id}"
-  policy_arn = "${aws_iam_policy.logs_write.arn}"
+  role       = aws_iam_role.codebuild.id
+  policy_arn = aws_iam_policy.logs_write.arn
 }

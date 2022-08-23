@@ -1,15 +1,15 @@
 # These variables are likely to be set on your environments/<env>.tfvars
 # ======================================================================
-variable aws_region {
+variable "aws_region" {
   type = string
 }
 
-variable aws_profile {
+variable "aws_profile" {
   type = string
 }
 
 # Declare an AWS provider
 # =======================
 provider "aws" {
-  region = "${var.aws_region}"
+  region = var.aws_region
 }

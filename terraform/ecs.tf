@@ -1,21 +1,32 @@
 resource "aws_ecr_repository" "main" {
   name = "insurgency_server-registry"
+
+  tags = merge(
+    local.common_tags,
+    {
+    }
+  )
 }
 
 resource "aws_ecs_cluster" "main" {
   name = "${local.service_name}-Cluster"
 
+  tags = merge(
+    local.common_tags,
+    {
+    }
+  )
 }
 
 resource "aws_ecs_task_definition" "main" {
-  family = "${local.service_name}-Task"
-  network_mode = "awsvpc"
+  family                   = "${local.service_name}-Task"
+  network_mode             = "awsvpc"
   requires_compatibilities = ["FARGATE"]
-  cpu = "512"
-  memory = "1024"
+  cpu                      = "512"
+  memory                   = "1024"
 
   # This is required to use images from ECR
-  execution_role_arn = "${aws_iam_role.ecs_task_execution.arn}"
+  execution_role_arn = aws_iam_role.ecs_task_execution.arn
 
   # Docker settings for launching this container. This is similar to what
   # docker-compose does, but in a way that maps to AWS ECS orchestration engine.
@@ -65,21 +76,33 @@ resource "aws_ecs_task_definition" "main" {
   }
 ]
 DEFINITION
+
+  tags = merge(
+    local.common_tags,
+    {
+    }
+  )
 }
 
 resource "aws_ecs_service" "main" {
-  name = "${local.service_name}-Service"
-  cluster = "${aws_ecs_cluster.main.id}"
-  task_definition = "${aws_ecs_task_definition.main.arn}"
-  launch_type = "FARGATE"
-  desired_count = 0
+  name            = "${local.service_name}-Service"
+  cluster         = aws_ecs_cluster.main.id
+  task_definition = aws_ecs_task_definition.main.arn
+  launch_type     = "FARGATE"
+  desired_count   = 0
 
   network_configuration {
     security_groups = [
       "${aws_default_security_group.default.id}",
       "${aws_security_group.allow_server_traffic_from_internet.id}"
     ]
-    subnets = ["${aws_subnet.main.id}"]
+    subnets          = ["${aws_subnet.main.id}"]
     assign_public_ip = true
   }
+
+  tags = merge(
+    local.common_tags,
+    {
+    }
+  )
 }

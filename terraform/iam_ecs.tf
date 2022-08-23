@@ -1,9 +1,15 @@
 data "aws_iam_policy" "amazon_ecs_task_execution_role_policy" {
   arn = "arn:aws:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy"
+
+  tags = merge(
+    local.common_tags,
+    {
+    }
+  )
 }
 
 resource "aws_iam_role" "ecs_task_execution" {
-  name = "ECSTaskExecutionRoleFor${local.service_name}"
+  name        = "ECSTaskExecutionRoleFor${local.service_name}"
   description = "Role attached to ECS Task Execution"
 
   assume_role_policy = <<EOF
@@ -21,9 +27,15 @@ resource "aws_iam_role" "ecs_task_execution" {
   ]
 }
 EOF
+
+  tags = merge(
+    local.common_tags,
+    {
+    }
+  )
 }
 
 resource "aws_iam_role_policy_attachment" "aws_ecs_task_execution_policy_to_role" {
-  role = "${aws_iam_role.ecs_task_execution.name}"
-  policy_arn = "${data.aws_iam_policy.amazon_ecs_task_execution_role_policy.arn}"
+  role       = aws_iam_role.ecs_task_execution.name
+  policy_arn = data.aws_iam_policy.amazon_ecs_task_execution_role_policy.arn
 }
