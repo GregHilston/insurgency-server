@@ -26,6 +26,8 @@ This repository allows one to deploy an [Insurgency](https://store.steampowered.
 
 ## Building The Docker Image
 
+_Note: These steps assume the AWS Cloud Resources have been deployed already._
+
 ### Building The Docker Image Remotely Using AWS Code Build
 
 - `$ ./bin/start-aws-codebuild.sh`
